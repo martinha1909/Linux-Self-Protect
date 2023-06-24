@@ -8,6 +8,9 @@ The design of this project can be found under `doc/design`
 
 A list of known bugs can be found under `doc/bugs`
 
+## Notes
+Commits from this project was done in a private repository and recently made public. Hence, this repository was imported from that private repository and therefore no commit history can be found
+
 # Prerequisites
 ## Build
 This project can be built using the `build.sh` script under `src/build.sh`. Please note that everything in this build script currently uses <b>relative paths</b>, so the current working directory <b>MUST</b> be under `src/` for this build script to work. 
