@@ -1,4 +1,4 @@
-# About the project
+# Linux Self Protect
 
 Self Protect is a daemon process that monitors important files and directories and protects them from being tampered with on Linux using [fanotify](https://man7.org/linux/man-pages/man7/fanotify.7.html). Currently only Debian based system is supported
 
