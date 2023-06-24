@@ -1,0 +1,53 @@
+#!/bin/bash
+
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NO_COLOR='\033[0m'
+
+echo -e "${YELLOW}Enter selfprotect token: ${NO_COLOR}"
+#time out in 5 mins
+read -s -t 300 token
+token_hash=$(echo -n "$token" | sha256sum | awk '{print $1}')
+
+echo "Verifying..."
+correct_token=$(curl -X POST https://self-protect-token-generator.onrender.com/get-hashed-token\
+                     -H 'Content-Type: application/json'\
+                     -d '{"username":"self_protect_service",
+                          "password":"32b03588ddc264d8e5afaf0d5f10e30ced33701bf304605cdcf5b60dfb477e94"}'\
+                2>/dev/null |\
+                jq -r '.hashedToken' |\
+                jq -r '.value')
+
+if [ $token_hash == $correct_token ]; then
+    echo -e "${GREEN}Correct token${NO_COLOR}, uninstalling selfprotect..."
+
+    sudo chattr -i /usr/bin/self_protect
+
+    echo "Cleaning up background processes..."
+    pids=$(ps -ef | grep sysd_service_monitor | grep -v grep | awk '{print $2}')
+    if [ -z "$pids" ]; then
+        echo "No background processes found, skipping..."
+    else 
+        sp_pids=$(ps -ef | grep self_protect | grep -v grep | awk '{print $2}')
+        sudo kill -9 $pids $sp_pids
+    fi
+    sudo systemctl disable selfprotect.service
+    sudo systemctl stop selfprotect.service
+    sudo chattr -i /usr/bin/sysd_service_monitor
+    sudo chattr -i /usr/bin/sysd_client
+    sudo chattr -i /usr/bin/sp_bin_upload
+    sudo chattr -R -i /opt/self_protect
+
+    input="/opt/self_protect/config_list"
+    while IFS= read -r line
+    do
+        sudo chattr -R -i $line
+    done < "$input"
+else
+    echo -e "${RED}Incorrect Token${NO_COLOR}"
+    echo "Cannot uninstall 'selfprotect': Operation not permitted"
+    pids=$(ps -ef | grep remove | grep -v prerm | grep -v grep | awk '{print $2}')
+    sudo kill -9 $pids
+    sudo dpkg --configure -a
+fi

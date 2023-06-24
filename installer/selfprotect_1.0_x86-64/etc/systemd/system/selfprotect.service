@@ -1,0 +1,12 @@
+[Unit]
+Description=selfprotectservice
+
+[Service]
+User=root
+WorkingDirectory=/root
+ExecStart=/usr/bin/self_protect
+Restart=always
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

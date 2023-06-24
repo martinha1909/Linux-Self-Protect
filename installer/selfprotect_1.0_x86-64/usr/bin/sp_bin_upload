@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [ "$#" -ne 4 ]; then
+    echo "Illegal number of arguments"
+    echo "Usage: <program> <auth_token> <\"upload\"/\"download\"> <local_dir> <remote_dir>"
+    exit 1
+fi
+
+AUTH_TOKEN=$1
+ACTION=$2
+LOCAL_DIR=$3
+REMOTE_DIR=$4
+
+if [ "$ACTION" = "upload" ]; then
+    #enable reading permission
+    sudo chattr -i $LOCAL_DIR
+    sudo chmod +r $LOCAL_DIR
+
+    curl -X POST https://content.dropboxapi.com/2/files/upload \
+        --header "Authorization: Bearer $AUTH_TOKEN" \
+        --header "Dropbox-API-Arg: {\"autorename\":false,\"mode\":\"add\",\"mute\":false,\"path\":\"$REMOTE_DIR\",\"strict_conflict\":false}" \
+        --header "Content-Type: application/octet-stream" \
+        --data-binary @$LOCAL_DIR
+elif [ "$ACTION" = "download" ]; then
+    curl -X POST https://content.dropboxapi.com/2/files/download \
+        --header "Authorization: Bearer $AUTH_TOKEN" \
+        --header "Dropbox-API-Arg: {\"path\":\"$REMOTE_DIR\"}" \
+        -o "$LOCAL_DIR"
+fi

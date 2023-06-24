@@ -1,0 +1,20 @@
+#!/bin/bash
+
+GREEN='\033[0;32m'
+NO_COLOR='\033[0m'
+
+#need this for systemd to be able to launch gnome-terminal
+sudo systemctl import-environment DISPLAY XAUTHORITY
+
+sudo systemctl daemon-reload
+sudo systemctl enable selfprotect.service
+sudo systemctl start selfprotect.service
+
+sudo chattr +i /usr/bin/self_protect
+sudo chattr +i /usr/bin/sysd_service_monitor
+sudo chattr +i /usr/bin/sysd_client
+sudo chmod u+x /usr/bin/sp_bin_upload
+sudo chattr +i /usr/bin/sp_bin_upload
+
+echo -e "${GREEN}/opt/self_protect/config_list created, add directories to this file to protect${NO_COLOR}"
+echo "To remove self_protect service: sudo apt-get remove selfprotect"

@@ -1,0 +1,9 @@
+Package: selfprotect
+Version: 1.0
+Architecture: amd64
+Essential: no
+Priority: optional
+Built-Using: g++-11.3
+Depends: ubuntu-gnome-desktop,dbus-x11,curl,libcurl4-openssl-dev,libssl-dev,jq, auditd
+Maintainer: Team Unicorn
+Description: self protect service is a program that prevents important files from being deleted

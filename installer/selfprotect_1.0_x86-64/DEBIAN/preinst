@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo "Checking for stale self_protect dependencies..."
+
+if [ -f /usr/bin/self_protect ]; then
+    echo "Removing /usr/bin/self_protect"
+    sudo chattr -i /usr/bin/self_protect
+    sudo rm /usr/bin/self_protect
+fi
+
+if [ -f /usr/bin/sysd_service_monitor ]; then
+    echo "Removing /usr/bin/sysd_service_monitor"
+    sudo chattr -i /usr/bin/sysd_service_monitor
+    sudo rm /usr/bin/sysd_service_monitor
+fi
+
+if [ -f /usr/bin/sysd_client ]; then
+    echo "Removing /usr/bin/sysd_service_monitor"
+    sudo chattr -i /usr/bin/sysd_client
+    sudo rm /usr/bin/sysd_client
+fi
+
+if [ -f /usr/bin/sp_bin_upload ]; then
+    echo "Removing /usr/bin/sp_bin_upload"
+    sudo chattr -i /usr/bin/sp_bin_upload
+    sudo rm /usr/bin/sp_bin_upload
+fi
+
+if [ -d /opt/self_protect ]; then
+    echo "Removing /opt/self_protect"
+    sudo chattr -R -i /opt/self_protect
+    sudo rm -rf /opt/self_protect
+fi
+
+if [ -f /var/log/self_protect.log ]; then
+    echo "Removing /var/log/self_protect.log"
+    sudo rm /var/log/self_protect.log
+fi
+
+if [ -f /etc/systemd/system/sp_socket ]; then
+    echo "Removing /etc/systemd/system/sp_socket"
+    sudo rm /etc/systemd/system/sp_socket
+fi

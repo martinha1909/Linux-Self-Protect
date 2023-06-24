@@ -1,0 +1,58 @@
+#!/bin/bash
+
+pids=$(ps -ef | grep sysd_service_monitor | grep -v grep | awk '{print $2}')
+if [ -z "$pids" ]; then
+    echo "No background processes found, skipping..."
+else 
+    sp_pids=$(ps -ef | grep self_protect | grep -v grep | awk '{print $2}')
+    sudo kill -9 $pids $sp_pids
+fi
+
+if [ -f /usr/bin/sysd_service_monitor ]; then
+    echo "Removing /usr/bin/sysd_service_monitor"
+    sudo chattr -i /usr/bin/sysd_service_monitor
+    sudo rm /usr/bin/sysd_service_monitor
+fi
+
+if [ -f /usr/bin/sysd_client ]; then
+    echo "Removing /usr/bin/sysd_client"
+    sudo chattr -i /usr/bin/sysd_client
+    sudo rm /usr/bin/sysd_client
+fi
+
+if [ -f /usr/bin/self_protect ]; then
+    echo "Removing /usr/bin/self_protect"
+    sudo chattr -i /usr/bin/self_protect
+    sudo rm /usr/bin/self_protect
+fi
+
+if [ -f /usr/bin/sp_bin_upload ]; then
+    echo "Removing /usr/bin/sp_bin_upload"
+    sudo chattr -i /usr/bin/sp_bin_upload
+    sudo rm /usr/bin/sp_bin_upload
+fi
+
+if [ -d /opt/self_protect ]; then
+    echo "Removing /opt/self_protect"
+    sudo chattr -R -i /opt/self_protect
+    sudo rm -rf /opt/self_protect
+fi
+
+if [ -f /var/log/self_protect.log ]; then
+    echo "Removing /var/log/self_protect.log"
+    sudo rm /var/log/self_protect.log
+fi
+
+if [ -f /etc/systemd/system/sp_socket ]; then
+    echo "Removing /etc/systemd/system/sp_socket"
+    sudo rm /etc/systemd/system/sp_socket
+fi
+
+curl -X DELETE https://self-protect-token-generator.onrender.com/delete-attempts \
+    --header "Content-Type: application/json" \
+    --data "{\
+                \"username\":\"self_protect_service\",\
+                \"password\":\"32b03588ddc264d8e5afaf0d5f10e30ced33701bf304605cdcf5b60dfb477e94\"\
+            }"
+printf "\n";
+echo "selfprotect uninstalled successfully"
