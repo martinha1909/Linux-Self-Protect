@@ -1,6 +1,6 @@
 # About the project
 
-SelfProtectService is a daemon process that monitors important files and directories and protects them from being tampered with on Linux using [fanotify](https://man7.org/linux/man-pages/man7/fanotify.7.html). Currently only Debian based system is supported
+Self Protect is a daemon process that monitors important files and directories and protects them from being tampered with on Linux using [fanotify](https://man7.org/linux/man-pages/man7/fanotify.7.html). Currently only Debian based system is supported
 
 For details on how `fanotify` is utilized in this project, please see `src/FanotifyEvents/README.md`
 
