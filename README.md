@@ -91,21 +91,5 @@ There are 2 ways to run the project
     - All files and directories are immutable
     - Any operations are denied immediately and no authorization prompt will occur
 
-
-# Credentials
-
-### Dropbox file sharing backup server
-- The service constantly backs up protected files and directories to Dropbox, which can be logged into by using the following credentials
-
-    ```
-    email: selfprotectservice@gmail.com
-    password: TeamUnicorn12345
-    ```
-- The token to transporting backup files and directories to Dropbox refreshes every 4 hours, in order to upload files and directories successfully, the following steps have to be done:
-    1. Retrieve the new token by logging into [Dropbox Developer Apps](https://www.dropbox.com/developers) using the credentials above
-    2. Click on SelfProtectService
-    3. Press the `Generate` button in the OAuth 2 section 
-    4. Paste that value into the constant `DROPBOX_API_AUTH_TOKEN` in `src/include/FileTransport.hpp`
-
-### Token Web Server
+# Token Web Server
 - A valid token can be retrieved through the [Self Protect Service Token Generator](https://self-protect-token-generator.onrender.com/login)
