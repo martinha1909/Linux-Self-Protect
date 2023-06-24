@@ -1,4 +1,4 @@
-# List of Known Bugs
+# Known Bugs
 1. Intermitten failure of multiple events in one command.
 - When a command is issued with multiple objects, `mkdir dir1 dir2` for example, will result in the 2nd object not being caught by our service, but that object is still marked. Hence, performing any actions on that uncaught object results in the service crash. 
 - Although this bug is not investigated, it seems that doing the following steps could reproduce the bug:
